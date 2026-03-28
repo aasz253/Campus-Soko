@@ -25,6 +25,9 @@ const listingSchema = new mongoose.Schema({
   images: [{
     type: String
   }],
+  videos: [{
+    type: String
+  }],
   location: {
     type: String,
     required: [true, 'Location is required'],

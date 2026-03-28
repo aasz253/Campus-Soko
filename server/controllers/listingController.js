@@ -1,8 +1,27 @@
 const Listing = require('../models/Listing');
+const path = require('path');
+
+const uploadMedia = async (req, res) => {
+  try {
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ message: 'No files uploaded' });
+    }
+
+    const mediaUrls = req.files.map(file => ({
+      url: `/uploads/${file.filename}`,
+      type: file.mimetype.startsWith('video') ? 'video' : 'image'
+    }));
+
+    res.status(200).json({ media: mediaUrls });
+  } catch (error) {
+    console.error('Upload error:', error);
+    res.status(500).json({ message: 'Server error uploading media' });
+  }
+};
 
 const createListing = async (req, res) => {
   try {
-    const { title, description, price, category, images, location } = req.body;
+    const { title, description, price, category, images, videos, location } = req.body;
 
     const listing = await Listing.create({
       title,
@@ -10,6 +29,7 @@ const createListing = async (req, res) => {
       price,
       category,
       images: images || [],
+      videos: videos || [],
       location,
       user: req.user._id
     });
@@ -168,5 +188,6 @@ module.exports = {
   updateListing,
   deleteListing,
   getMyListings,
-  getCategories
+  getCategories,
+  uploadMedia
 };
