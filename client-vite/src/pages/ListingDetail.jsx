@@ -51,20 +51,25 @@ export default function ListingDetail() {
         <div>
           <div style={{ aspectRatio: '1', background: '#e5e7eb', borderRadius: '12px', overflow: 'hidden', marginBottom: '15px' }}>
             {listing.images && listing.images.length > 0 ? (
-              <img src={listing.images[0]} alt={listing.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src={`http://localhost:5001${listing.images[0]}`} alt={listing.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            ) : listing.videos && listing.videos.length > 0 ? (
+              <video src={`http://localhost:5001${listing.videos[0]}`} controls style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             ) : (
               <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '80px' }}>📦</div>
             )}
           </div>
-          {listing.images && listing.images.length > 1 && (
-            <div style={{ display: 'flex', gap: '10px' }}>
-              {listing.images.map((img, idx) => (
-                <button key={idx} onClick={() => {}} style={{ width: '60px', height: '60px', border: 'none', borderRadius: '8px', overflow: 'hidden', cursor: 'pointer' }}>
-                  <img src={img} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          {(listing.images && listing.images.length > 1) || (listing.videos && listing.videos.length > 0) ? (
+            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+              {listing.images?.map((img, idx) => (
+                <button key={`img-${idx}`} onClick={() => {}} style={{ width: '60px', height: '60px', border: 'none', borderRadius: '8px', overflow: 'hidden', cursor: 'pointer' }}>
+                  <img src={`http://localhost:5001${img}`} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </button>
               ))}
+              {listing.videos?.map((vid, idx) => (
+                <video key={`vid-${idx}`} src={`http://localhost:5001${vid}`} style={{ width: '60px', height: '60px', borderRadius: '8px', objectFit: 'cover' }} />
+              ))}
             </div>
-          )}
+          ) : null}
         </div>
 
         <div>

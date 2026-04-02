@@ -3,10 +3,10 @@ const User = require('../models/User');
 
 const sendMessage = async (req, res) => {
   try {
-    const { receiverId, listingId, message } = req.body;
+    const { receiverId, listingId, message, type } = req.body;
 
-    if (!receiverId || !listingId || !message) {
-      return res.status(400).json({ message: 'All fields are required' });
+    if (!receiverId || !message) {
+      return res.status(400).json({ message: 'Receiver and message are required' });
     }
 
     if (receiverId === req.user._id.toString()) {
@@ -16,8 +16,9 @@ const sendMessage = async (req, res) => {
     const newMessage = await Message.create({
       sender: req.user._id,
       receiver: receiverId,
-      listing: listingId,
-      message
+      listing: listingId || null,
+      message,
+      type: type || 'text'
     });
 
     const populatedMessage = await Message.findById(newMessage._id)

@@ -68,9 +68,16 @@ export default function Home() {
               <div style={{ background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', transition: '0.2s' }}>
                 <div style={{ height: '200px', background: '#e5e7eb', position: 'relative' }}>
                   {listing.images && listing.images.length > 0 ? (
-                    <img src={listing.images[0]} alt={listing.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <img src={`http://localhost:5001${listing.images[0]}`} alt={listing.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  ) : listing.videos && listing.videos.length > 0 ? (
+                    <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#1a1a2e' }}>
+                      <span style={{ fontSize: '40px' }}>🎬</span>
+                    </div>
                   ) : (
                     <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '40px' }}>📦</div>
+                  )}
+                  {listing.videos && listing.videos.length > 0 && (
+                    <span style={{ position: 'absolute', top: '10px', left: '10px', background: '#dc2626', color: 'white', padding: '2px 8px', borderRadius: '12px', fontSize: '12px' }}>🎬 Video</span>
                   )}
                   <span style={{ position: 'absolute', top: '10px', right: '10px', background: 'white', padding: '4px 10px', borderRadius: '12px', fontSize: '12px' }}>{listing.category}</span>
                 </div>

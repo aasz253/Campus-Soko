@@ -108,6 +108,10 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on('video_call', ({ from, to, type, offer, answer, candidate }) => {
+    io.to(to).emit('video_call', { from, type, offer, answer, candidate });
+  });
+
   socket.on('disconnect', async () => {
     let disconnectedUserId = null;
     

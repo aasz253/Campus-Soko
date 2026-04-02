@@ -64,6 +64,12 @@ export const SocketProvider = ({ children }) => {
     }
   };
 
+  const sendVideoSignal = (to, data) => {
+    if (socket && user) {
+      socket.emit('video_call', { from: user._id, to, ...data });
+    }
+  };
+
   return (
     <SocketContext.Provider value={{
       socket,
@@ -72,6 +78,7 @@ export const SocketProvider = ({ children }) => {
       emitTyping,
       emitStopTyping,
       markAsRead,
+      sendVideoSignal,
       isOnline: (userId) => onlineUsers.includes(userId)
     }}>
       {children}

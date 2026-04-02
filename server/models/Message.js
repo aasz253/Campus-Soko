@@ -13,13 +13,17 @@ const messageSchema = new mongoose.Schema({
   },
   listing: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Listing',
-    required: true
+    ref: 'Listing'
   },
   message: {
     type: String,
     required: [true, 'Message is required'],
-    maxlength: [1000, 'Message cannot exceed 1000 characters']
+    maxlength: [5000, 'Message cannot exceed 5000 characters']
+  },
+  type: {
+    type: String,
+    enum: ['text', 'image', 'video'],
+    default: 'text'
   },
   isRead: {
     type: Boolean,
