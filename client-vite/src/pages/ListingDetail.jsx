@@ -4,6 +4,17 @@ import { listingAPI } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 import Loading from '../components/Loading';
 import { getFileUrl } from '../config';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+
+// Fix for default marker icon
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
+  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+});
 
 // Get time-based greeting
 const getGreeting = () => {
@@ -148,11 +159,56 @@ export default function ListingDetail() {
 
           <p style={{ color: '#4b5563', marginBottom: '20px', lineHeight: '1.6' }}>{listing.description}</p>
 
-          <div style={{ display: 'flex', gap: '20px', marginBottom: '30px', color: '#6b7280' }}>
+          <div style={{ display: 'flex', gap: '20px', marginBottom: '20px', color: '#6b7280', flexWrap: 'wrap' }}>
             <span>📍 {listing.location}</span>
             <span>👁 {listing.views} views</span>
             <span>📅 {new Date(listing.createdAt).toLocaleDateString()}</span>
           </div>
+
+          {listing.coordinates?.latitude && listing.coordinates?.longitude && (
+            <div style={{ marginBottom: '20px' }}>
+              <p style={{ fontWeight: '600', marginBottom: '10px', color: '#374151' }}>📍 Pinned Location</p>
+              <div style={{
+                height: '200px',
+                width: '100%',
+                borderRadius: '12px',
+                overflow: 'hidden',
+                border: '1px solid #e5e7eb'
+              }}>
+                <MapContainer
+                  center={[listing.coordinates.latitude, listing.coordinates.longitude]}
+                  zoom={15}
+                  style={{ height: '100%', width: '100%' }}
+                  scrollWheelZoom={false}
+                >
+                  <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  />
+                  <Marker position={[listing.coordinates.latitude, listing.coordinates.longitude]}>
+                    <Popup>
+                      <strong>{listing.title}</strong><br />
+                      {listing.location}
+                    </Popup>
+                  </Marker>
+                </MapContainer>
+              </div>
+              <a
+                href={`https://www.openstreetmap.org/?mlat=${listing.coordinates.latitude}&mlon=${listing.coordinates.longitude}#map=15/${listing.coordinates.latitude}/${listing.coordinates.longitude}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-block',
+                  marginTop: '8px',
+                  color: '#0ea5e9',
+                  fontSize: '14px',
+                  textDecoration: 'none'
+                }}
+              >
+                Open in OpenStreetMap →
+              </a>
+            </div>
+          )}
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '20px', background: '#f9fafb', borderRadius: '12px', marginBottom: '20px' }}>
             <div style={{ width: '50px', height: '50px', borderRadius: '50%', background: '#e5e7eb', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>

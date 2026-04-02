@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { listingAPI } from '../utils/api';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
+import MapPicker from '../components/MapPicker';
 
 const CATEGORIES = ['Electronics', 'Books', 'Clothes', 'Furniture', 'Others'];
 
@@ -18,6 +19,7 @@ export default function PostListing() {
     category: '',
     location: '',
     whatsapp: '',
+    coordinates: { latitude: null, longitude: null },
     images: [],
     videos: []
   });
@@ -200,6 +202,16 @@ export default function PostListing() {
           <p style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>
             Include country code (e.g., 254 for Kenya). Buyers can message you directly.
           </p>
+        </div>
+
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>
+            📍 Pin Location on Map
+          </label>
+          <MapPicker
+            coordinates={formData.coordinates}
+            onLocationChange={(coords) => setFormData(prev => ({ ...prev, coordinates: coords }))}
+          />
         </div>
 
         <div style={{ marginBottom: '20px' }}>
