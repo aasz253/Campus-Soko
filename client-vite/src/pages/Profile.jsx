@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { authAPI } from '../utils/api';
 import { Camera, X, User as UserIcon } from 'lucide-react';
+import { getFileUrl } from '../config';
 
 export default function Profile() {
   const { user, updateUser } = useAuth();
@@ -88,10 +89,7 @@ export default function Profile() {
   const getDisplayImage = () => {
     if (previewImage) return previewImage;
     if (formData.profileImage) {
-      if (formData.profileImage.startsWith('http')) {
-        return formData.profileImage;
-      }
-      return `http://localhost:5001${formData.profileImage}`;
+      return getFileUrl(formData.profileImage);
     }
     return null;
   };

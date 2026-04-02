@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { listingAPI } from '../utils/api';
 import Loading from '../components/Loading';
+import { getFileUrl } from '../config';
 
 const CATEGORIES = ['All', 'Electronics', 'Books', 'Clothes', 'Furniture', 'Others'];
 
@@ -32,7 +33,7 @@ export default function Home() {
     <div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
       <div style={{ background: 'linear-gradient(to right, #0284c7, #f97316)', color: 'white', padding: '40px 20px', borderRadius: '16px', marginBottom: '30px', textAlign: 'center' }}>
         <h1 style={{ fontSize: '32px', marginBottom: '10px' }}>Find Great Deals on Campus</h1>
-        <p>Buy and sell items with fellow students</p>
+        <p>Buy and sell items with fellow comrades</p>
       </div>
 
       <div style={{ marginBottom: '20px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
@@ -68,7 +69,7 @@ export default function Home() {
               <div style={{ background: 'white', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', transition: '0.2s' }}>
                 <div style={{ height: '200px', background: '#e5e7eb', position: 'relative' }}>
                   {listing.images && listing.images.length > 0 ? (
-                    <img src={`http://localhost:5001${listing.images[0]}`} alt={listing.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <img src={getFileUrl(listing.images[0])} alt={listing.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   ) : listing.videos && listing.videos.length > 0 ? (
                     <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#1a1a2e' }}>
                       <span style={{ fontSize: '40px' }}>🎬</span>

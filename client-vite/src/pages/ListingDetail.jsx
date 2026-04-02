@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { listingAPI } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 import Loading from '../components/Loading';
+import { getFileUrl } from '../config';
 
 export default function ListingDetail() {
   const { id } = useParams();
@@ -51,9 +52,9 @@ export default function ListingDetail() {
         <div>
           <div style={{ aspectRatio: '1', background: '#e5e7eb', borderRadius: '12px', overflow: 'hidden', marginBottom: '15px' }}>
             {listing.images && listing.images.length > 0 ? (
-              <img src={`http://localhost:5001${listing.images[0]}`} alt={listing.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src={getFileUrl(listing.images[0])} alt={listing.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             ) : listing.videos && listing.videos.length > 0 ? (
-              <video src={`http://localhost:5001${listing.videos[0]}`} controls style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <video src={getFileUrl(listing.videos[0])} controls style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             ) : (
               <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '80px' }}>📦</div>
             )}
@@ -62,11 +63,11 @@ export default function ListingDetail() {
             <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
               {listing.images?.map((img, idx) => (
                 <button key={`img-${idx}`} onClick={() => {}} style={{ width: '60px', height: '60px', border: 'none', borderRadius: '8px', overflow: 'hidden', cursor: 'pointer' }}>
-                  <img src={`http://localhost:5001${img}`} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img src={getFileUrl(img)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </button>
               ))}
               {listing.videos?.map((vid, idx) => (
-                <video key={`vid-${idx}`} src={`http://localhost:5001${vid}`} style={{ width: '60px', height: '60px', borderRadius: '8px', objectFit: 'cover' }} />
+                <video key={`vid-${idx}`} src={getFileUrl(vid)} style={{ width: '60px', height: '60px', borderRadius: '8px', objectFit: 'cover' }} />
               ))}
             </div>
           ) : null}

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { listingAPI } from '../utils/api';
 import axios from 'axios';
+import { API_BASE_URL } from '../config';
 
 const CATEGORIES = ['Electronics', 'Books', 'Clothes', 'Furniture', 'Others'];
 
@@ -34,7 +35,7 @@ export default function PostListing() {
       const formDataUpload = new FormData();
       files.forEach(file => formDataUpload.append('media', file));
 
-      const res = await axios.post('http://localhost:5001/api/listings/upload', formDataUpload, {
+      const res = await axios.post(`${API_BASE_URL}/listings/upload`, formDataUpload, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -44,7 +45,7 @@ export default function PostListing() {
       const newImages = res.data.media
         .filter(m => m.type === 'image')
         .map(m => m.url);
-      
+
       setFormData(prev => ({ ...prev, images: [...prev.images, ...newImages] }));
     } catch (err) {
       console.error('Upload error:', err);
@@ -62,7 +63,7 @@ export default function PostListing() {
       const formDataUpload = new FormData();
       files.forEach(file => formDataUpload.append('media', file));
 
-      const res = await axios.post('http://localhost:5001/api/listings/upload', formDataUpload, {
+      const res = await axios.post(`${API_BASE_URL}/listings/upload`, formDataUpload, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${localStorage.getItem('token')}`

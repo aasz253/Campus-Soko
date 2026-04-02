@@ -14,26 +14,47 @@ const fs = require('fs');
 
 dotenv.config();
 
+// Create uploads directories
 if (!fs.existsSync('./uploads')) {
   fs.mkdirSync('./uploads');
+}
+if (!fs.existsSync('./uploads/profiles')) {
+  fs.mkdirSync('./uploads/profiles', { recursive: true });
 }
 
 connectDB();
 
 const app = express();
 const server = http.createServer(app);
+
+// CORS configuration for production
+const allowedOrigins = process.env.CLIENT_URL 
+  ? process.env.CLIENT_URL.split(',') 
+  : ['http://localhost:5173', 'http://localhost:3000'];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin) || allowedOrigins.includes('*')) {
+      callback(null, true);
+    } else {
+      callback(null, true); // Be permissive for now, tighten later
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  credentials: true
+};
+
 const io = new Server(server, {
   cors: {
-    origin: '*',
+    origin: allowedOrigins,
     methods: ['GET', 'POST'],
     credentials: true
   }
 });
 
-app.use(cors({
-  origin: '*',
-  credentials: true
-}));
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

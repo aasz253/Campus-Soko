@@ -5,6 +5,7 @@ import { useSocket } from '../context/SocketContext';
 import { messageAPI, authAPI, listingAPI } from '../utils/api';
 import Loading from '../components/Loading';
 import axios from 'axios';
+import { API_BASE_URL, getFileUrl } from '../config';
 
 export default function Chat() {
   const { userId } = useParams();
@@ -113,7 +114,7 @@ export default function Chat() {
       const formData = new FormData();
       formData.append('media', file);
       
-      const res = await axios.post('http://localhost:5001/api/listings/upload', formData, {
+      const res = await axios.post(`${API_BASE_URL}/listings/upload`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -291,7 +292,7 @@ export default function Chat() {
               <div key={idx} style={{ display: 'flex', justifyContent: isMe ? 'flex-end' : 'flex-start', marginBottom: '15px' }}>
                 <div style={{ maxWidth: '70%', padding: '12px 16px', borderRadius: '16px', background: isMe ? '#0ea5e9' : 'white', color: isMe ? 'white' : '#374151', boxShadow: '0 1px 2px rgba(0,0,0,0.1)' }}>
                   {msg.type === 'image' ? (
-                    <img src={`http://localhost:5001${msg.message}`} alt="sent" style={{ maxWidth: '200px', borderRadius: '8px' }} />
+                    <img src={getFileUrl(msg.message)} alt="sent" style={{ maxWidth: '200px', borderRadius: '8px' }} />
                   ) : (
                     <p>{msg.message}</p>
                   )}

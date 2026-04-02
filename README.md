@@ -1,6 +1,6 @@
 # Campus Soko - Campus Marketplace
 
-A modern campus marketplace where students (comrades) can buy and sell items easily within their university.
+A modern campus marketplace where comrades can buy and sell items easily within their university.
 
 ![Campus Soko](https://via.placeholder.com/800x400?text=Campus+Soko)
 
@@ -203,4 +203,4 @@ MIT License
 
 ## Author
 
-Built for students, by students 🏫
+Built for comrades, by comrades 🏫
