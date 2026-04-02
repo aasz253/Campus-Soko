@@ -54,10 +54,11 @@ const corsOptions = {
 
 const io = new Server(server, {
   cors: {
-    origin: allowedOrigins,
+    origin: '*',
     methods: ['GET', 'POST'],
     credentials: true
-  }
+  },
+  transports: ['websocket', 'polling']
 });
 
 app.use(cors(corsOptions));
