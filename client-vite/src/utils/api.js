@@ -38,6 +38,9 @@ export const authAPI = {
   login: (data) => api.post('/auth/login', data),
   getMe: () => api.get('/auth/me'),
   updateProfile: (data) => api.put('/auth/profile', data),
+  uploadProfileImage: (data) => api.post('/auth/profile/upload', data, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }),
   getUser: (id) => api.get(`/auth/${id}`)
 };
 

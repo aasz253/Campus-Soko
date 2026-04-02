@@ -1,5 +1,7 @@
 const User = require('../models/User');
 const { generateToken } = require('../middleware/auth');
+const path = require('path');
+const fs = require('fs');
 
 const register = async (req, res) => {
   try {
@@ -95,6 +97,38 @@ const updateProfile = async (req, res) => {
   }
 };
 
+const uploadProfileImage = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'No image file provided' });
+    }
+
+    const user = await User.findById(req.user._id);
+
+    // Delete old profile image if exists
+    if (user.profileImage && user.profileImage.startsWith('/uploads/profiles/')) {
+      const oldImagePath = path.join(__dirname, '..', user.profileImage);
+      if (fs.existsSync(oldImagePath)) {
+        fs.unlinkSync(oldImagePath);
+      }
+    }
+
+    // Set new profile image URL
+    const imageUrl = `/uploads/profiles/${req.file.filename}`;
+    user.profileImage = imageUrl;
+    await user.save();
+
+    res.json({
+      message: 'Profile image uploaded successfully',
+      profileImage: imageUrl,
+      user
+    });
+  } catch (error) {
+    console.error('Upload profile image error:', error);
+    res.status(500).json({ message: 'Server error uploading profile image' });
+  }
+};
+
 const getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
@@ -113,5 +147,6 @@ module.exports = {
   login,
   getMe,
   updateProfile,
+  uploadProfileImage,
   getUserById
 };
