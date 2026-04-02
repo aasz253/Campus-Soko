@@ -80,7 +80,7 @@ export default function ListingDetail() {
         ← Back
       </button>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '40px' }}>
+      <div className="listing-grid" style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '40px' }}>
         <div>
           <div style={{ aspectRatio: '4/3', background: '#000', borderRadius: '12px', overflow: 'hidden', marginBottom: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {activeMedia.type === 'video' ? (
@@ -273,6 +273,15 @@ export default function ListingDetail() {
           )}
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .listing-grid {
+            grid-template-columns: 1fr !important;
+            gap: 20px !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }
