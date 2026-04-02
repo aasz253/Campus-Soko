@@ -29,8 +29,11 @@ const register = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error('Register error:', error);
-    res.status(500).json({ message: 'Server error during registration' });
+    console.error('Register error:', error.message);
+    if (error.code === 11000) {
+      return res.status(400).json({ message: 'Email already registered' });
+    }
+    res.status(500).json({ message: 'Registration failed: ' + error.message });
   }
 };
 
@@ -64,8 +67,8 @@ const login = async (req, res) => {
       token
     });
   } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({ message: 'Server error during login' });
+    console.error('Login error:', error.message);
+    res.status(500).json({ message: 'Login failed: ' + error.message });
   }
 };
 

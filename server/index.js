@@ -15,14 +15,20 @@ const fs = require('fs');
 dotenv.config();
 
 // Create uploads directories
-if (!fs.existsSync('./uploads')) {
-  fs.mkdirSync('./uploads');
+const uploadsDir = path.join(__dirname, 'uploads');
+const profilesDir = path.join(__dirname, 'uploads', 'profiles');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
 }
-if (!fs.existsSync('./uploads/profiles')) {
-  fs.mkdirSync('./uploads/profiles', { recursive: true });
+if (!fs.existsSync(profilesDir)) {
+  fs.mkdirSync(profilesDir, { recursive: true });
 }
 
-connectDB();
+// Connect to MongoDB with better error handling
+connectDB().catch(err => {
+  console.error('MongoDB connection failed:', err.message);
+  // Don't exit - let server start anyway for health checks
+});
 
 const app = express();
 const server = http.createServer(app);
