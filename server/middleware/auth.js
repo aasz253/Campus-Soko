@@ -28,7 +28,8 @@ const protect = async (req, res, next) => {
 };
 
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
+  const secret = process.env.JWT_SECRET || 'campus-soko-secret-key-change-in-production-2024';
+  return jwt.sign({ id }, secret, {
     expiresIn: '30d'
   });
 };
