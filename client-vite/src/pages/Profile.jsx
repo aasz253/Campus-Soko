@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { authAPI } from '../utils/api';
-import { Camera, Upload, X, User as UserIcon } from 'lucide-react';
+import { Camera, X, User as UserIcon } from 'lucide-react';
 
 export default function Profile() {
   const { user, updateUser } = useAuth();
@@ -23,25 +23,21 @@ export default function Profile() {
   const handleImageSelect = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Validate file type
       if (!file.type.startsWith('image/')) {
         setError('Please select an image file');
         return;
       }
-      // Validate file size (5MB)
       if (file.size > 5 * 1024 * 1024) {
         setError('Image must be less than 5MB');
         return;
       }
 
-      // Create preview
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreviewImage(reader.result);
       };
       reader.readAsDataURL(file);
 
-      // Upload immediately
       handleFileUpload(file);
     }
   };
@@ -100,59 +96,203 @@ export default function Profile() {
     return null;
   };
 
+  const styles = {
+    container: {
+      minHeight: '100vh',
+      background: '#f8fafc',
+      padding: '32px 16px',
+    },
+    wrapper: {
+      maxWidth: '500px',
+      margin: '0 auto',
+    },
+    title: {
+      fontSize: '28px',
+      fontWeight: '700',
+      color: '#1e293b',
+      marginBottom: '24px',
+    },
+    errorBox: {
+      background: '#fef2f2',
+      border: '1px solid #fecaca',
+      color: '#dc2626',
+      padding: '12px 16px',
+      borderRadius: '10px',
+      marginBottom: '16px',
+      fontSize: '14px',
+    },
+    successBox: {
+      background: '#f0fdf4',
+      border: '1px solid #bbf7d0',
+      color: '#16a34a',
+      padding: '12px 16px',
+      borderRadius: '10px',
+      marginBottom: '16px',
+      fontSize: '14px',
+    },
+    card: {
+      background: 'white',
+      borderRadius: '16px',
+      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+      padding: '32px',
+    },
+    imageContainer: {
+      textAlign: 'center',
+      marginBottom: '32px',
+    },
+    imageWrapper: {
+      position: 'relative',
+      display: 'inline-block',
+    },
+    imageCircle: {
+      width: '120px',
+      height: '120px',
+      borderRadius: '50%',
+      background: '#e2e8f0',
+      margin: '0 auto 16px',
+      overflow: 'hidden',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      border: '4px solid #0ea5e9',
+    },
+    img: {
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover',
+    },
+    uploadBtn: {
+      position: 'absolute',
+      bottom: '8px',
+      right: '8px',
+      background: '#0ea5e9',
+      color: 'white',
+      border: 'none',
+      borderRadius: '50%',
+      width: '40px',
+      height: '40px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      cursor: 'pointer',
+      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.2)',
+      transition: 'background 0.2s',
+    },
+    clearBtn: {
+      position: 'absolute',
+      top: '4px',
+      right: '4px',
+      background: '#ef4444',
+      color: 'white',
+      border: 'none',
+      borderRadius: '50%',
+      width: '28px',
+      height: '28px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      cursor: 'pointer',
+      boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+    },
+    hintText: {
+      color: '#64748b',
+      fontSize: '14px',
+      marginTop: '8px',
+    },
+    smallHint: {
+      color: '#94a3b8',
+      fontSize: '12px',
+      marginTop: '4px',
+    },
+    inputGroup: {
+      marginBottom: '20px',
+    },
+    label: {
+      display: 'block',
+      fontSize: '14px',
+      fontWeight: '600',
+      color: '#374151',
+      marginBottom: '8px',
+    },
+    input: {
+      width: '100%',
+      padding: '12px 16px',
+      border: '1px solid #d1d5db',
+      borderRadius: '10px',
+      fontSize: '15px',
+      outline: 'none',
+      transition: 'border-color 0.2s, box-shadow 0.2s',
+    },
+    inputDisabled: {
+      width: '100%',
+      padding: '12px 16px',
+      border: '1px solid #e5e7eb',
+      borderRadius: '10px',
+      fontSize: '15px',
+      background: '#f3f4f6',
+      color: '#9ca3af',
+      cursor: 'not-allowed',
+    },
+    submitBtn: {
+      width: '100%',
+      padding: '14px',
+      background: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)',
+      color: 'white',
+      border: 'none',
+      borderRadius: '10px',
+      fontSize: '16px',
+      fontWeight: '600',
+      cursor: 'pointer',
+      transition: 'transform 0.2s, box-shadow 0.2s',
+    },
+    submitBtnDisabled: {
+      opacity: 0.6,
+      cursor: 'not-allowed',
+    },
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
-      <div className="max-w-lg mx-auto">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6">My Profile</h1>
+    <div style={styles.container}>
+      <div style={styles.wrapper}>
+        <h1 style={styles.title}>My Profile</h1>
 
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-4">
-            {error}
-          </div>
-        )}
-        {success && (
-          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-4">
-            {success}
-          </div>
-        )}
+        {error && <div style={styles.errorBox}>{error}</div>}
+        {success && <div style={styles.successBox}>{success}</div>}
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-md p-6">
+        <form onSubmit={handleSubmit} style={styles.card}>
           {/* Profile Image Section */}
-          <div className="text-center mb-6">
-            <div className="relative inline-block">
-              <div className="w-28 h-28 rounded-full bg-gray-200 mx-auto overflow-hidden flex items-center justify-center border-4 border-sky-500">
+          <div style={styles.imageContainer}>
+            <div style={styles.imageWrapper}>
+              <div style={styles.imageCircle}>
                 {getDisplayImage() ? (
-                  <img
-                    src={getDisplayImage()}
-                    alt="Profile"
-                    className="w-full h-full object-cover"
-                  />
+                  <img src={getDisplayImage()} alt="Profile" style={styles.img} />
                 ) : (
-                  <UserIcon size={48} className="text-gray-400" />
+                  <UserIcon size={48} color="#94a3b8" />
                 )}
               </div>
 
-              {/* Upload Overlay */}
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploading}
-                className="absolute bottom-0 right-0 bg-sky-500 hover:bg-sky-600 text-white p-2 rounded-full shadow-lg transition-colors disabled:opacity-50"
+                style={styles.uploadBtn}
               >
                 {uploading ? (
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <div style={{
+                    width: '20px',
+                    height: '20px',
+                    border: '2px solid white',
+                    borderTopColor: 'transparent',
+                    borderRadius: '50%',
+                    animation: 'spin 1s linear infinite',
+                  }} />
                 ) : (
                   <Camera size={18} />
                 )}
               </button>
 
-              {/* Clear Preview Button */}
               {previewImage && (
-                <button
-                  type="button"
-                  onClick={clearPreview}
-                  className="absolute top-0 right-0 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full shadow-lg transition-colors"
-                >
+                <button type="button" onClick={clearPreview} style={styles.clearBtn}>
                   <X size={14} />
                 </button>
               )}
@@ -163,54 +303,63 @@ export default function Profile() {
               type="file"
               accept="image/*"
               onChange={handleImageSelect}
-              className="hidden"
+              style={{ display: 'none' }}
             />
 
-            <p className="text-sm text-gray-500 mt-3">
+            <p style={styles.hintText}>
               {uploading ? 'Uploading...' : 'Click the camera icon to upload a photo'}
             </p>
-            <p className="text-xs text-gray-400">Max size: 5MB (JPEG, PNG, GIF, WebP)</p>
+            <p style={styles.smallHint}>Max size: 5MB (JPEG, PNG, GIF, WebP)</p>
           </div>
 
           {/* Name Field */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Name
-            </label>
+          <div style={styles.inputGroup}>
+            <label style={styles.label}>Name</label>
             <input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent outline-none transition-all"
+              style={styles.input}
+              onFocus={(e) => e.target.style.borderColor = '#0ea5e9'}
+              onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
             />
           </div>
 
-          {/* Email Field (Read-only) */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email
-            </label>
+          {/* Email Field */}
+          <div style={{ ...styles.inputGroup, marginBottom: '24px' }}>
+            <label style={styles.label}>Email</label>
             <input
               type="email"
               value={user?.email || ''}
               disabled
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg bg-gray-100 text-gray-500 cursor-not-allowed"
+              style={styles.inputDisabled}
             />
-            <p className="text-xs text-gray-400 mt-1">Email cannot be changed</p>
+            <p style={{ fontSize: '12px', color: '#94a3b8', marginTop: '6px' }}>
+              Email cannot be changed
+            </p>
           </div>
 
           {/* Submit Button */}
           <button
             type="submit"
             disabled={loading || uploading}
-            className="w-full bg-sky-500 hover:bg-sky-600 text-white py-3 rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{
+              ...styles.submitBtn,
+              ...(loading || uploading ? styles.submitBtnDisabled : {}),
+            }}
           >
             {loading ? 'Saving...' : 'Save Changes'}
           </button>
         </form>
       </div>
+
+      <style>{`
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 }
