@@ -41,7 +41,7 @@ export default function ListingDetail() {
   const { user, isAuthenticated } = useAuth();
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [activeMedia, setActiveMedia] = useState({ type: 'image', url: '' });
+  const [activeMedia, setActiveMedia] = useState({ type: '', url: '' });
   const videoRef = useRef(null);
 
   useEffect(() => {
