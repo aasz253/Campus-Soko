@@ -211,9 +211,9 @@ export default function ListingDetail() {
           )}
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '20px', background: '#f9fafb', borderRadius: '12px', marginBottom: '20px' }}>
-            <div style={{ width: '50px', height: '50px', borderRadius: '50%', background: '#e5e7eb', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>
+            <div style={{ width: '50px', height: '50px', borderRadius: '50%', background: '#e5e7eb', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', overflow: 'hidden' }}>
               {listing.user?.profileImage ? (
-                <img src={listing.user.profileImage} alt={listing.user.name} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                <img src={getFileUrl(listing.user.profileImage)} alt={listing.user.name} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
               ) : (
                 <span>{listing.user?.name?.charAt(0).toUpperCase()}</span>
               )}

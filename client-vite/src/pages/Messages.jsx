@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { messageAPI } from '../utils/api';
 import Loading from '../components/Loading';
+import { getFileUrl } from '../config';
 
 export default function Messages() {
   const [conversations, setConversations] = useState([]);
@@ -43,7 +44,7 @@ export default function Messages() {
             >
               <div style={{ width: '50px', height: '50px', borderRadius: '50%', background: '#e5e7eb', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', flexShrink: 0 }}>
                 {conv.user?.profileImage ? (
-                  <img src={conv.user.profileImage} alt={conv.user.name} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                  <img src={getFileUrl(conv.user.profileImage)} alt={conv.user.name} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
                 ) : (
                   <span style={{ color: '#6b7280' }}>{conv.user?.name?.charAt(0).toUpperCase()}</span>
                 )}
