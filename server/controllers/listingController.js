@@ -21,7 +21,7 @@ const uploadMedia = async (req, res) => {
 
 const createListing = async (req, res) => {
   try {
-    const { title, description, price, category, images, videos, location } = req.body;
+    const { title, description, price, category, images, videos, location, whatsapp, coordinates } = req.body;
 
     const listing = await Listing.create({
       title,
@@ -31,6 +31,8 @@ const createListing = async (req, res) => {
       images: images || [],
       videos: videos || [],
       location,
+      whatsapp: whatsapp || '',
+      coordinates: coordinates || { latitude: null, longitude: null },
       user: req.user._id
     });
 
@@ -120,7 +122,7 @@ const updateListing = async (req, res) => {
       return res.status(403).json({ message: 'Not authorized to update this listing' });
     }
 
-    const { title, description, price, category, images, location, isSold, isBoosted } = req.body;
+    const { title, description, price, category, images, location, isSold, isBoosted, whatsapp, coordinates } = req.body;
 
     if (title) listing.title = title;
     if (description) listing.description = description;
@@ -130,6 +132,8 @@ const updateListing = async (req, res) => {
     if (location) listing.location = location;
     if (isSold !== undefined) listing.isSold = isSold;
     if (isBoosted !== undefined) listing.isBoosted = isBoosted;
+    if (whatsapp !== undefined) listing.whatsapp = whatsapp;
+    if (coordinates) listing.coordinates = coordinates;
 
     await listing.save();
 
