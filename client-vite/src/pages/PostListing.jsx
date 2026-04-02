@@ -206,7 +206,7 @@ export default function PostListing() {
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '10px' }}>
             {formData.videos.map((vid, idx) => (
               <div key={idx} style={{ position: 'relative', width: '150px', height: '100px' }}>
-                <video src={vid} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px' }} />
+                <video src={vid} controls style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px', background: '#000' }} />
                 <button type="button" onClick={() => removeVideo(idx)} style={{ position: 'absolute', top: '-5px', right: '-5px', background: 'red', color: 'white', border: 'none', borderRadius: '50%', width: '20px', height: '20px', cursor: 'pointer' }}>×</button>
               </div>
             ))}

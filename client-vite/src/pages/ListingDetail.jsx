@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { listingAPI } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
@@ -11,6 +11,8 @@ export default function ListingDetail() {
   const { user, isAuthenticated } = useAuth();
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [activeMedia, setActiveMedia] = useState({ type: 'image', url: '' });
+  const videoRef = useRef(null);
 
   useEffect(() => {
     fetchListing();
@@ -50,24 +52,65 @@ export default function ListingDetail() {
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px' }}>
         <div>
-          <div style={{ aspectRatio: '1', background: '#e5e7eb', borderRadius: '12px', overflow: 'hidden', marginBottom: '15px' }}>
-            {listing.images && listing.images.length > 0 ? (
-              <img src={getFileUrl(listing.images[0])} alt={listing.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <div style={{ aspectRatio: '1', background: '#000', borderRadius: '12px', overflow: 'hidden', marginBottom: '15px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            {activeMedia.type === 'video' ? (
+              <video
+                ref={videoRef}
+                src={activeMedia.url}
+                controls
+                autoPlay
+                preload="auto"
+                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+              />
+            ) : activeMedia.type === 'image' ? (
+              <img src={activeMedia.url} alt={listing.title} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+            ) : listing.images && listing.images.length > 0 ? (
+              <img src={getFileUrl(listing.images[0])} alt={listing.title} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
             ) : listing.videos && listing.videos.length > 0 ? (
-              <video src={getFileUrl(listing.videos[0])} controls style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <video src={getFileUrl(listing.videos[0])} controls preload="metadata" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
             ) : (
-              <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '80px' }}>📦</div>
+              <div style={{ fontSize: '80px' }}>📦</div>
             )}
           </div>
           {(listing.images && listing.images.length > 1) || (listing.videos && listing.videos.length > 0) ? (
             <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
               {listing.images?.map((img, idx) => (
-                <button key={`img-${idx}`} onClick={() => {}} style={{ width: '60px', height: '60px', border: 'none', borderRadius: '8px', overflow: 'hidden', cursor: 'pointer' }}>
+                <button
+                  key={`img-${idx}`}
+                  onClick={() => setActiveMedia({ type: 'image', url: getFileUrl(img) })}
+                  style={{
+                    width: '60px',
+                    height: '60px',
+                    border: activeMedia.url === getFileUrl(img) ? '2px solid #0ea5e9' : '2px solid transparent',
+                    borderRadius: '8px',
+                    overflow: 'hidden',
+                    cursor: 'pointer',
+                    padding: 0
+                  }}
+                >
                   <img src={getFileUrl(img)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </button>
               ))}
               {listing.videos?.map((vid, idx) => (
-                <video key={`vid-${idx}`} src={getFileUrl(vid)} style={{ width: '60px', height: '60px', borderRadius: '8px', objectFit: 'cover' }} />
+                <button
+                  key={`vid-${idx}`}
+                  onClick={() => {
+                    setActiveMedia({ type: 'video', url: getFileUrl(vid) });
+                  }}
+                  style={{
+                    width: '60px',
+                    height: '60px',
+                    border: activeMedia.url === getFileUrl(vid) ? '2px solid #0ea5e9' : '2px solid transparent',
+                    borderRadius: '8px',
+                    overflow: 'hidden',
+                    cursor: 'pointer',
+                    padding: 0,
+                    position: 'relative',
+                    background: '#1a1a2e'
+                  }}
+                >
+                  <span style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', fontSize: '20px' }}>▶️</span>
+                </button>
               ))}
             </div>
           ) : null}
