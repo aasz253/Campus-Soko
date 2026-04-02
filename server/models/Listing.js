@@ -49,6 +49,11 @@ const listingSchema = new mongoose.Schema({
   views: {
     type: Number,
     default: 0
+  },
+  whatsapp: {
+    type: String,
+    trim: true,
+    default: ''
   }
 }, {
   timestamps: true

@@ -17,6 +17,7 @@ export default function PostListing() {
     price: '',
     category: '',
     location: '',
+    whatsapp: '',
     images: [],
     videos: []
   });
@@ -182,6 +183,23 @@ export default function PostListing() {
             style={{ width: '100%', padding: '12px', border: '1px solid #d1d5db', borderRadius: '8px' }}
             placeholder="e.g., University Hostel, Library"
           />
+        </div>
+
+        <div style={{ marginBottom: '20px' }}>
+          <label style={{ display: 'block', marginBottom: '8px', fontWeight: '500' }}>
+            📱 WhatsApp Number (optional)
+          </label>
+          <input
+            type="tel"
+            name="whatsapp"
+            value={formData.whatsapp}
+            onChange={handleChange}
+            style={{ width: '100%', padding: '12px', border: '1px solid #d1d5db', borderRadius: '8px' }}
+            placeholder="e.g., 254712345678"
+          />
+          <p style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>
+            Include country code (e.g., 254 for Kenya). Buyers can message you directly.
+          </p>
         </div>
 
         <div style={{ marginBottom: '20px' }}>
